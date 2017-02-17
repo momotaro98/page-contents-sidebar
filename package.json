@@ -1,0 +1,46 @@
+{
+  "name": "md-index-sideviewer",
+  "version": "1.0.0",
+  "description": "Web Side Viewer for Markdown",
+  "scripts": {
+    "build": "gulp",
+    "test": "gulp test",
+    "dist": "gulp dist",
+    "ff": "cd ./tmp/firefox && jpm run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/momotaro98/md-index-sideviewer"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/momotaro98/md-index-sideviewer/issues"
+  },
+  "homepage": "https://github.com/momotaro98/md-index-sideviewer",
+  "devDependencies": {
+    "async": "~0.9.0",
+    "babel-core": "^6.1.2",
+    "babel-preset-es2015": "^6.1.2",
+    "chromedriver": "^2.21.2",
+    "crx": "^0.4.4",
+    "event-stream": "*",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "0.0.8",
+    "gulp-babel": "^6.1.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "*",
+    "gulp-less": "^1.3.1",
+    "gulp-load-plugins": "^0.5.3",
+    "gulp-mocha": "2.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-replace": "^0.5.4",
+    "gulp-run": "^1.6.4",
+    "gulp-run-sequence": "*",
+    "gulp-util": "^2.2.20",
+    "gulp-zip": "^2.0.3",
+    "map-stream": "*",
+    "mocha": "2.0.1",
+    "request": "~2.48.0",
+    "stream-series": "*"
+  }
+}
