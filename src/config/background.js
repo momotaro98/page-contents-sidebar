@@ -14,6 +14,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     ];
 
     const jsFiles = [
+      'jquery.js',
       'mdisviewer.js'
     ];
 

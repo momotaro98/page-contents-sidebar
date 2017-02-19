@@ -1,1 +1,3 @@
-console.log("This is md-index-sideviewer!");
+$(document).ready(() => {
+  console.log("This is md-index-viewer");
+});
