@@ -42,6 +42,9 @@ gulp.task('js', ['template'], () => {
   const src = [
     './tmp/template.js',
     './src/constants.js',
+    './src/adapters/adapter.js',
+    './src/adapters/gistmd.js',
+    './src/view.index.js',
     './src/util.async.js',
     './src/util.storage.js'
   ].concat(['./src/config/overrides.js'])

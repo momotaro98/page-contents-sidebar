@@ -1,0 +1,2 @@
+class GistMD extends Adapter {
+}
