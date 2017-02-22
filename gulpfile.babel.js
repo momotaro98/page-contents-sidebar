@@ -41,6 +41,9 @@ gulp.task('template', () => {
 gulp.task('js', ['template'], () => {
   const src = [
     './tmp/template.js',
+    './src/constants.js',
+    './src/util.async.js',
+    './src/util.storage.js'
   ].concat(['./src/config/overrides.js'])
    .concat('./src/mdisviewer.js');
 
