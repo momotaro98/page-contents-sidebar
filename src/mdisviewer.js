@@ -24,9 +24,5 @@ $(document).ready(() => {
     const indexview = new IndexView($dom, store, adapter);
 
     $html.addClass(ADDON_CLASS);
-
-    const views = [IndexView];
-    views.forEach((view) => {
-    });
   }
 });
