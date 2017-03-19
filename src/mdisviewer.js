@@ -24,5 +24,9 @@ $(document).ready(() => {
     const indexview = new IndexView($dom, store, adapter);
 
     $html.addClass(ADDON_CLASS);
+
+    $sidebar
+      .width(parseInt(store.get(STORE.WIDTH)))
+      .appendTo($('body'));
   }
 });
