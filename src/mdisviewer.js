@@ -28,5 +28,7 @@ $(document).ready(() => {
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
       .appendTo($('body'));
+
+    $html.addClass(SHOW_CLASS);
   }
 });
