@@ -27,8 +27,21 @@ $(document).ready(() => {
 
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
+      .resize(layoutChanged)
       .appendTo($('body'));
 
     $html.addClass(SHOW_CLASS);
+
+    layoutChanged();
+
+    function layoutChanged() {
+      const width = $sidebar.outerWidth();
+      adapter.updateLayout(isSidebarVisible(), width);
+      store.set(STORE.WIDTH, width);
+    }
+
+    function isSidebarVisible() {
+      return $html.hasClass(SHOW_CLASS);
+    }
   }
 });
