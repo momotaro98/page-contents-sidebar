@@ -30,6 +30,8 @@ $(document).ready(() => {
       .resize(layoutChanged)
       .appendTo($('body'));
 
+    adapter.init($sidebar);
+
     $html.addClass(SHOW_CLASS);
 
     layoutChanged();

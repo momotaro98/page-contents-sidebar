@@ -1,6 +1,16 @@
 const GIST_CONTAINER = '.container';
 
 class GistMD extends Adapter {
+
+  init($sidebar) {
+    super.init($sidebar);
+  }
+
+  // @override
+  getCssClass() {
+    return 'mdisviewer_gist_sidebar';
+  }
+
   // updateLayout pushes Gist's content page to right for sidebar
   updateLayout(sidebarVisible, sidebarWidth) {
     const SPACING = 10;
