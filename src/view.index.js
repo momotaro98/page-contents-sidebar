@@ -24,21 +24,62 @@ class IndexView {
           '<a href="' + path + '">' + 'demo-link' + '</a>' +
         '</div>'
       );
-
-    var $header = this.$view.find('mdisviewer_header');
-    console.log("$header:", $header);
   }
 
   _showBody() {
+    // TODO: replace the following sample data
+    const md_array = [
+      'Chapter 1',
+      [
+        'section 1-1',
+        [
+          'sub-section 1-1-1',
+          'sub-section 1-1-2',
+          'sub-section 1-1-3',
+        ],
+        'section 1-2',
+        [
+          'sub-section 1-2-1',
+        ],
+      ],
+      'Chapter 2',
+      [
+        'section 2-1',
+        [
+          'sub-section 2-1-1',
+          'sub-section 2-1-2',
+        ]
+      ],
+      'Chapter 3',
+      [
+        'section 3-1',
+        'section 3-2',
+      ]
+    ];
+
+    const generated_html_index = generate_html_index_from_md_array(md_array);
     this.$view.find('.mdisviewer_body')
       .html(
-        '<div class="mdisviwer_content">' +
-          '<ul>' +
-            '<li>AAA</li>' +
-            '<li>BBB</li>' +
-            '<li>CCC</li>' +
-          '</ul>' +
-        '</div>'
+        '<div class="mdisviewer_md_list">' +
+          generated_html_index
+        + '</div>'
       );
+
+    function generate_html_index_from_md_array(arr) {
+      var out = '';
+      for(var i = 0; i < arr.length; i++) {
+        var current_content = arr[i];
+        if(typeof current_content === "string") {
+          if (out.length > 0) {
+            out += '</li><li>';
+          }
+          out += '<a href="#' + current_content + '">' + current_content + '</a>';
+        } else {
+          out += generate_html_index_from_md_array(current_content);
+        }
+      }
+      return '<ol><li>' + out + '</li></ol>';
+    }
+
   }
 }

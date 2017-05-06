@@ -64,7 +64,32 @@
       margin-right: 6px;
       line-height: 28px;
     }
+    .mdisviewer_body {
+      .mdisviewer_md_list {
+        ol {
+          padding: 0px;
+          margin: 0px;
+          list-style-type: none;
+        }
+        li {
+          a {
+            color: #7d9ab7;
+            padding-left: 2px;
+            display: block;
+
+            &.current {
+              background-color: #efefef;
+            }
+            &:hover {
+              background-color: #efefef;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
   }
+
 }
 
 .mdisviewer-show {
