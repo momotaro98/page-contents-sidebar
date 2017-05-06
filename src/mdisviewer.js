@@ -21,7 +21,7 @@ $(document).ready(() => {
     const $sidebar = $dom.find('.mdi_sidebar');
     const $views = $sidebar.find('.mdisviewer_view');
     const adapter =  new GistMD();
-    const indexview = new IndexView($dom, store, adapter);
+    const indexView = new IndexView($dom, store, adapter);
 
     $html.addClass(ADDON_CLASS);
 
@@ -31,10 +31,26 @@ $(document).ready(() => {
       .appendTo($('body'));
 
     adapter.init($sidebar);
+    return tryGetIndex();
 
-    $html.addClass(SHOW_CLASS);
+    function tryGetIndex() {
+      adapter.getPathWhosePageIsMarkdown((path) => {
+        if (path) {
+          $html.addClass(SHOW_CLASS);
 
-    layoutChanged();
+          if (isSidebarVisible()) {
+            // TODO: check the changed to use browser's cache
+
+            indexView.show(path);
+          }
+
+        }
+        else {
+          // hide the sidebar
+        }
+        layoutChanged();
+      });
+    }
 
     function layoutChanged() {
       const width = $sidebar.outerWidth();
