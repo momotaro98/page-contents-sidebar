@@ -65,20 +65,21 @@ class IndexView {
         + '</div>'
       );
 
-    function generate_html_index_from_md_array(arr) {
+    function generate_html_index_from_md_array(arr, header_index = 0) {
       var out = '';
       for(var i = 0; i < arr.length; i++) {
-        var current_content = arr[i];
+        const current_content = arr[i];
         if(typeof current_content === "string") {
           if (out.length > 0) {
             out += '</li><li>';
           }
           out += '<a href="#' + current_content + '">' + current_content + '</a>';
         } else {
-          out += generate_html_index_from_md_array(current_content);
+          out += generate_html_index_from_md_array(current_content, header_index + 1);
         }
       }
-      return '<ol><li>' + out + '</li></ol>';
+      const ol_with_padding = '<ol style="padding: 0px 0px 0px ' + String(header_index * 10) + 'px;">';
+      return ol_with_padding + '<li>' + out + '</li></ol>';
     }
 
   }
