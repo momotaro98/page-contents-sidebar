@@ -35,23 +35,38 @@ class GistMD extends Adapter {
 
   loadMDArray(path, cb) {
 
-    function getArray($selector) {
-      const specifiedTagName = $selector.parent()[0].tagName;
-      var flag_getStarted = false;
+    function getArray($spec) {
+      var skip_to_currentTag_flag = false;
+      var skip_to_NextUpperTag_flag = false;
       var ret_array = [];
       $('article').find('a').each(function() {
-        if (flag_getStarted || $(this).is($selector)) {
-          flag_getStarted = true;
-          var $parent = $(this).parent();
-          if ($parent[0].tagName === specifiedTagName) {  // same headder
+        if (skip_to_currentTag_flag || $(this).is($spec)) {
+          skip_to_currentTag_flag = true;
+          const specTag = $spec.parent()[0].tagName;
+          const $parent = $(this).parent();
+          const tag = new TagHeaderComparator($parent[0].tagName);
+
+          if (tag.isSameWith(specTag)) {
+            if (skip_to_NextUpperTag_flag) {
+              skip_to_NextUpperTag_flag = false;
+            }
             ret_array.push($parent.text());
-          } else if (false) {  // TODO: implement switch under or upper header
-            ret_array.push(getArray($(this)));
-          } else {  // upper header
-            return ret_array;
+            return true;
           }
+          if (tag.isUnderThan(specTag)) {
+            if (skip_to_NextUpperTag_flag) {
+              return true;
+            }
+            ret_array.push(getArray($(this)));
+            skip_to_NextUpperTag_flag = true;
+            return true;
+          }
+          if (tag.isUpperThan(specTag)) {
+            return false;
+          }
+
         }
-      })
+      });
       return ret_array;
     }
 

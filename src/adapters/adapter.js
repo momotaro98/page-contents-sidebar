@@ -25,3 +25,26 @@ class Adapter {
     return 200;
   }
 }
+
+
+class TagHeaderComparator {
+  constructor(baseTag) {
+    this.baseTag = baseTag;
+  }
+
+  isUnderThan(tag) {
+    return this._getNum(this.baseTag) > this._getNum(tag)
+  }
+
+  isUpperThan(tag) {
+    return this._getNum(this.baseTag) < this._getNum(tag)
+  }
+
+  isSameWith(tag) {
+    return this._getNum(this.baseTag) === this._getNum(tag)
+  }
+
+  _getNum(tag) {
+    return Number(tag.slice(1));
+  }
+}
