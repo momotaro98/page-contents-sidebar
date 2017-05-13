@@ -7,11 +7,11 @@ class IndexView {
   }
 
   show(path) {
-    this.adapter.loadIndexList(path, (err, indexList) => {
+    this.adapter.loadMDArray(path, (err, md_array) => {
       if (err) {
         return;
       }
-      // this._prepare_show(indexList);
+      this._md_array = md_array;
     });
     this._showHeader(path);
     this._showBody();
@@ -27,37 +27,7 @@ class IndexView {
   }
 
   _showBody() {
-    // TODO: replace the following sample data
-    const md_array = [
-      'Chapter 1',
-      [
-        'section 1-1',
-        [
-          'sub-section 1-1-1',
-          'sub-section 1-1-2',
-          'sub-section 1-1-3',
-        ],
-        'section 1-2',
-        [
-          'sub-section 1-2-1',
-        ],
-      ],
-      'Chapter 2',
-      [
-        'section 2-1',
-        [
-          'sub-section 2-1-1',
-          'sub-section 2-1-2',
-        ]
-      ],
-      'Chapter 3',
-      [
-        'section 3-1',
-        'section 3-2',
-      ]
-    ];
-
-    const generated_html_index = generate_html_index_from_md_array(md_array);
+    const generated_html_index = generate_html_index_from_md_array(this._md_array);
     this.$view.find('.mdisviewer_body')
       .html(
         '<div class="mdisviewer_md_list">' +
