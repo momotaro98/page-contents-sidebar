@@ -48,3 +48,27 @@ class TagHeaderComparator {
     return Number(tag.slice(1));
   }
 }
+
+
+class IndexContent {
+  constructor() {
+    this._text = null;
+    this._fragmentID = null;
+  }
+
+  getText() {
+    return this._text;
+  }
+
+  setText(text) {
+    this._text = text;
+  }
+
+  getFragmentID() {
+    return this._fragmentID;
+  }
+
+  setFragmentID(fragmentID) {
+    this._fragmentID = fragmentID;
+  }
+}

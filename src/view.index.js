@@ -37,15 +37,14 @@ class IndexView {
 
     function generate_html_index_from_md_array(arr, header_index = 0) {
       var out = '';
-      for(var i = 0; i < arr.length; i++) {
-        const current_content = arr[i];
-        if(typeof current_content === "string") {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] instanceof IndexContent) {
           if (out.length > 0) {
             out += '</li><li>';
           }
-          out += '<a href="#' + current_content + '">' + current_content + '</a>';
+          out += '<a href="' + arr[i].getFragmentID() + '">' + arr[i].getText() + '</a>';
         } else {
-          out += generate_html_index_from_md_array(current_content, header_index + 1);
+          out += generate_html_index_from_md_array(arr[i], header_index + 1);
         }
       }
       const ol_with_padding = '<ol style="padding: 0px 0px 0px ' + String(header_index * 10) + 'px;">';

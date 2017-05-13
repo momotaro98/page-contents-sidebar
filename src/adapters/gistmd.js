@@ -35,7 +35,7 @@ class GistMD extends Adapter {
 
   loadMDArray(path, cb) {
     // Load the markdown's index array
-    const md_array = getArray($("article").find("a:first"));
+    const md_array = this._getIndexContentArray();
 
     // if error occurs
     // cb(err);
@@ -47,6 +47,10 @@ class GistMD extends Adapter {
     const link = $(this).attr('href');
     console.log(link);
     */
+  }
+
+  _getIndexContentArray() {
+    return getArray($("article").find("a:first"));
 
     function getArray($spec) {
       var skip_to_currentTag_flag = false;
@@ -63,7 +67,12 @@ class GistMD extends Adapter {
             if (skip_to_NextUpperTag_flag) {
               skip_to_NextUpperTag_flag = false;
             }
-            ret_array.push($parent.text());
+
+            var indexContent = new IndexContent();
+            indexContent.setText($parent.text());
+            indexContent.setFragmentID($(this).attr('href'));
+
+            ret_array.push(indexContent);
             return true;
           }
           if (tag.isUnderThan(specTag)) {
@@ -82,5 +91,7 @@ class GistMD extends Adapter {
       });
       return ret_array;
     }
+
   }
+
 }
