@@ -34,6 +34,19 @@ class GistMD extends Adapter {
   }
 
   loadMDArray(path, cb) {
+    // Load the markdown's index array
+    const md_array = getArray($("article").find("a:first"));
+
+    // if error occurs
+    // cb(err);
+
+    // if ok
+    cb(null, md_array);
+
+    /* link
+    const link = $(this).attr('href');
+    console.log(link);
+    */
 
     function getArray($spec) {
       var skip_to_currentTag_flag = false;
@@ -69,49 +82,5 @@ class GistMD extends Adapter {
       });
       return ret_array;
     }
-
-    // Load the markdown's index array
-    const ret_array = getArray($("article").find("a:first"));
-    console.log(ret_array);
-
-    /* link
-    const link = $(this).attr('href');
-    console.log(link);
-    */
-
-    const md_array = [
-      'Chapter 1',
-      [
-        'section 1-1',
-        [
-          'sub-section 1-1-1',
-          'sub-section 1-1-2',
-          'sub-section 1-1-3',
-        ],
-        'section 1-2',
-        [
-          'sub-section 1-2-1',
-        ],
-      ],
-      'Chapter 2',
-      [
-        'section 2-1',
-        [
-          'sub-section 2-1-1',
-          'sub-section 2-1-2',
-        ]
-      ],
-      'Chapter 3',
-      [
-        'section 3-1',
-        'section 3-2',
-      ]
-    ];
-
-    // if error occurs
-    // cb(err);
-
-    // if ok
-    cb(null, md_array);
   }
 }
