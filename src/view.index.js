@@ -7,11 +7,11 @@ class IndexView {
   }
 
   show(path) {
-    this.adapter.loadIndexList(path, (err, indexList) => {
+    this.adapter.loadMDArray(path, (err, md_array) => {
       if (err) {
         return;
       }
-      // this._prepare_show(indexList);
+      this._md_array = md_array;
     });
     this._showHeader(path);
     this._showBody();
@@ -27,37 +27,7 @@ class IndexView {
   }
 
   _showBody() {
-    // TODO: replace the following sample data
-    const md_array = [
-      'Chapter 1',
-      [
-        'section 1-1',
-        [
-          'sub-section 1-1-1',
-          'sub-section 1-1-2',
-          'sub-section 1-1-3',
-        ],
-        'section 1-2',
-        [
-          'sub-section 1-2-1',
-        ],
-      ],
-      'Chapter 2',
-      [
-        'section 2-1',
-        [
-          'sub-section 2-1-1',
-          'sub-section 2-1-2',
-        ]
-      ],
-      'Chapter 3',
-      [
-        'section 3-1',
-        'section 3-2',
-      ]
-    ];
-
-    const generated_html_index = generate_html_index_from_md_array(md_array);
+    const generated_html_index = generate_html_index_from_md_array(this._md_array);
     this.$view.find('.mdisviewer_body')
       .html(
         '<div class="mdisviewer_md_list">' +
@@ -67,15 +37,14 @@ class IndexView {
 
     function generate_html_index_from_md_array(arr, header_index = 0) {
       var out = '';
-      for(var i = 0; i < arr.length; i++) {
-        const current_content = arr[i];
-        if(typeof current_content === "string") {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] instanceof IndexContent) {
           if (out.length > 0) {
             out += '</li><li>';
           }
-          out += '<a href="#' + current_content + '">' + current_content + '</a>';
+          out += '<a href="' + arr[i].getFragmentID() + '">' + arr[i].getText() + '</a>';
         } else {
-          out += generate_html_index_from_md_array(current_content, header_index + 1);
+          out += generate_html_index_from_md_array(arr[i], header_index + 1);
         }
       }
       const ol_with_padding = '<ol style="padding: 0px 0px 0px ' + String(header_index * 10) + 'px;">';

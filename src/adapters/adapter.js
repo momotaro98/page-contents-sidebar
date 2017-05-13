@@ -25,3 +25,50 @@ class Adapter {
     return 200;
   }
 }
+
+
+class TagHeaderComparator {
+  constructor(baseTag) {
+    this.baseTag = baseTag;
+  }
+
+  isUnderThan(tag) {
+    return this._getNum(this.baseTag) > this._getNum(tag)
+  }
+
+  isUpperThan(tag) {
+    return this._getNum(this.baseTag) < this._getNum(tag)
+  }
+
+  isSameWith(tag) {
+    return this._getNum(this.baseTag) === this._getNum(tag)
+  }
+
+  _getNum(tag) {
+    return Number(tag.slice(1));
+  }
+}
+
+
+class IndexContent {
+  constructor() {
+    this._text = null;
+    this._fragmentID = null;
+  }
+
+  getText() {
+    return this._text;
+  }
+
+  setText(text) {
+    this._text = text;
+  }
+
+  getFragmentID() {
+    return this._fragmentID;
+  }
+
+  setFragmentID(fragmentID) {
+    this._fragmentID = fragmentID;
+  }
+}
