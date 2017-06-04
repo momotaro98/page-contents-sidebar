@@ -35,10 +35,13 @@ class GistMD extends Adapter {
 
   loadMDArray(path, cb) {
     // Load the markdown's index array
-    const md_array = this._getIndexContentArray();
+    var md_array = this._getIndexContentArray();
 
     // if error occurs
     // cb(err);
+
+    // filter for deep level option func
+    md_array = this._filterByDeepLevel(md_array, 1);
 
     // if ok
     cb(null, md_array);
@@ -47,6 +50,40 @@ class GistMD extends Adapter {
     const link = $(this).attr('href');
     console.log(link);
     */
+  }
+
+  _filterByDeepLevel(md_array, deep_level) {
+    /*
+     * Input Example
+     * @md_array
+     * ["Chapter1", ["section 1-1", "section 2-2"], "Chapter2", "Chapter3"]
+     * @deep_level
+     * 1
+     *
+     * Output:
+     * ["Chapter1", "Chapter2", "Chapter3"]
+     */
+    return getArray(md_array, deep_level - 1);
+
+    function getArray(arr, deep_level) {
+      var delete_target_array_index_list = [];
+      // search the target
+      for (var i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i])) {
+          if (deep_level < 1) {
+            delete_target_array_index_list.unshift(i);
+          }
+          else {
+            arr[i] = getArray(arr[i], deep_level - 1);
+          }
+        }
+      }
+      // delete the targeted array
+      delete_target_array_index_list.forEach((val) => {
+        arr.splice(val, 1);
+      });
+      return arr;
+    }
   }
 
   _getIndexContentArray() {
