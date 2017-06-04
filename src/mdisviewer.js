@@ -43,9 +43,6 @@ $(document).ready(() => {
     $window.scroll(() => {
       const SCROLL_MARGIN = 50;
       const titleIndexLast = titleTopArr.length - 1;
-      var winHeight = $window.height();  // width of the window
-      var scrollHeight = $document.height();
-      var scrollRange = scrollHeight - scrollHeight;
       var scrollTop = $window.scrollTop();
 
       if (scrollTop <= SCROLL_MARGIN) {
