@@ -30,7 +30,11 @@ $(document).ready(() => {
     var titleTopArr = [];
     const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
     const $article_index = $html.find(adapter_article);
-    const $sectionQuery = $article_index.find('h1, h2, h3, h4, h5');  // TODO: Replace because this is not flexible
+
+    const DEEP_LEVEL = 3;
+
+    const header_levels = getHeaderLevels(DEEP_LEVEL);
+    const $sectionQuery = $article_index.find(header_levels);
     for (var i = 0; i < $sectionQuery.length; i++) {
       titleTopArr[i] = $sectionQuery.eq(i).offset().top;
     }
@@ -49,6 +53,8 @@ $(document).ready(() => {
         setCurrentTitle(0);
       }
       else {
+        // TODO: Fix this Bug
+        // 間隔が広いときハイライト箇所がおかしくなるので直す
         var index = 0;
         var pre_diff = Number.MAX_VALUE;
         $(titleTopArr).each((i, val) => {
@@ -89,7 +95,7 @@ $(document).ready(() => {
           if (isSidebarVisible()) {
             // TODO: check the changed to use browser's cache
 
-            indexView.show(path);
+            indexView.show(path, DEEP_LEVEL);
           }
 
         }
@@ -108,6 +114,35 @@ $(document).ready(() => {
 
     function isSidebarVisible() {
       return $html.hasClass(SHOW_CLASS);
+    }
+
+    // TODO: getHeaderLevels might be implemented in each adapter class
+    function getHeaderLevels(deep_level) {
+      var ret_string;
+      switch (deep_level) {
+        case 1:
+          ret_string = 'h1';
+          break;
+        case 2:
+          ret_string = 'h1, h2';
+          break;
+        case 3:
+          ret_string = 'h1, h2, h3';
+          break;
+        case 4:
+          ret_string = 'h1, h2, h3, h4';
+          break;
+        case 5:
+          ret_string = 'h1, h2, h3, h4, h5';
+          break;
+        case 6:
+          ret_string = 'h1, h2, h3, h4, h5, h6';
+          break;
+        default:
+          ret_string = 'h1, h2, h3, h4, h5, h6';
+          break;
+      }
+      return ret_string;
     }
   }
 });

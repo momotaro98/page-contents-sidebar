@@ -6,8 +6,8 @@ class IndexView {
     this.$body = this.$view.find('.mdisviewer_body');
   }
 
-  show(path) {
-    this.adapter.loadMDArray(path, (err, md_array) => {
+  show(path, deep_level) {
+    this.adapter.loadMDArray(path, deep_level, (err, md_array) => {
       if (err) {
         return;
       }

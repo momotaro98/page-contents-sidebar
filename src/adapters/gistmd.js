@@ -33,23 +33,18 @@ class GistMD extends Adapter {
     cb(path);
   }
 
-  loadMDArray(path, cb) {
+  loadMDArray(path, deep_level, cb) {
     // Load the markdown's index array
     var md_array = this._getIndexContentArray();
 
     // if error occurs
     // cb(err);
 
-    // filter for deep level option func
-    md_array = this._filterByDeepLevel(md_array, 1);
+    // Filter for deep level option func
+    md_array = this._filterByDeepLevel(md_array, deep_level);
 
-    // if ok
+    // Pass the md_array to viewer
     cb(null, md_array);
-
-    /* link
-    const link = $(this).attr('href');
-    console.log(link);
-    */
   }
 
   _filterByDeepLevel(md_array, deep_level) {
