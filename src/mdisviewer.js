@@ -26,18 +26,7 @@ $(document).ready(() => {
 
     $html.addClass(ADDON_CLASS);
 
-    // set each index title top position
-    var titleTopArr = [];
-    const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
-    const $article_index = $html.find(adapter_article);
-
-    const DEEP_LEVEL = 3;
-
-    const header_levels = getHeaderLevels(DEEP_LEVEL);
-    const $sectionQuery = $article_index.find(header_levels);
-    for (var i = 0; i < $sectionQuery.length; i++) {
-      titleTopArr[i] = $sectionQuery.eq(i).offset().top;
-    }
+    var titleTopArr = [];  // top position list of each title
 
     // set hilight to the 1st title
     var currentTitlePos = -1;
@@ -88,6 +77,17 @@ $(document).ready(() => {
     }
 
     function tryGetIndex() {
+      const deep_level = store.get(STORE.DEEPLEVEL);
+
+      // set titleTopArr for scroll hilight chasing
+      const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
+      const $article_index = $html.find(adapter_article);
+      const header_levels = getHeaderLevels(deep_level);
+      const $sectionQuery = $article_index.find(header_levels);
+      for (var i = 0; i < $sectionQuery.length; i++) {
+        titleTopArr[i] = $sectionQuery.eq(i).offset().top;
+      }
+
       adapter.getPathWhosePageIsMarkdown((path) => {
         if (path) {
           $html.addClass(SHOW_CLASS);
@@ -95,7 +95,7 @@ $(document).ready(() => {
           if (isSidebarVisible()) {
             // TODO: check the changed to use browser's cache
 
-            indexView.show(path, DEEP_LEVEL);
+            indexView.show(path, deep_level);
           }
 
         }
