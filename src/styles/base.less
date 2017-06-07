@@ -93,10 +93,35 @@
     }
   }
 
+  .mdisviewer_indexview {
+    .mdisviewer_header {
+      padding-left: 13px;
+    }
+  }
+
 }
 
 .mdisviewer-show {
   .mdi_sidebar {
     transform: translate3d(0, 0, 0);
   }
+}
+
+a.mdisviewer_toggle, a.mdisviewer_opts {
+  position: absolute !important;
+  text-align: center;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1000003;
+
+  & > span {
+    line-height: 1;
+    display: inline-block;
+    text-decoration: none;
+  }
+}
+
+a.mdisviewer_opts {
+  width: 15px;
+  height: 15px;
 }
