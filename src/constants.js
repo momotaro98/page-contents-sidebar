@@ -12,3 +12,8 @@ const DEFAULTS = {
   DEEPLEVEL: 6,
   SHOWN : false
 };
+
+const EVENT = {
+  VIEW_READY    : 'mdisviewer:ready',
+  VIEW_CLOSE    : 'mdisviewer:close',
+}

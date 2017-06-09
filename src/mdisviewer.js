@@ -23,6 +23,7 @@ $(document).ready(() => {
     const $views = $sidebar.find('.mdisviewer_view');
     const adapter =  new GistMD();
     const indexView = new IndexView($dom, store, adapter);
+    const optsView = new OptionsView($dom, store);
 
     $html.addClass(ADDON_CLASS);
 
@@ -56,6 +57,15 @@ $(document).ready(() => {
         });
         setCurrentTitle(index);
       }
+    });
+
+    const views = [indexView, optsView];
+    views.forEach((view) => {
+      $(view)
+        .on(EVENT.VIEW_READY, function (event) {
+          showView(this.$view);
+        })
+        .on(EVENT.VIEW_CLOSE, () => showView(indexView.$view))
     });
 
     $sidebar
@@ -104,6 +114,11 @@ $(document).ready(() => {
         }
         layoutChanged();
       });
+    }
+
+    function showView(view) {
+      $views.removeClass('current')
+      view.addClass('current')
     }
 
     function layoutChanged() {

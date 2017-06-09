@@ -27,4 +27,24 @@
     }
 
   }
+
+  a.octotree_toggle, a.mdisviewer_opts {
+    color: black !important;
+
+    &:hover, &.selected {
+      color: #0366d6 !important;
+    }
+  }
+
+  a.mdisviewer_opts {
+    top: 19px;
+    right: 48px;
+    width: 14px;
+    height: 16px;
+    background: data-uri('image/svg+xml;charset=UTF-8', './icons/gear.svg');
+    &:hover {
+      background: data-uri('image/svg+xml;charset=UTF-8', './icons/gear-hover.svg');
+    }
+  }
+
 }
