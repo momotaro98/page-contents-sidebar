@@ -66,6 +66,7 @@ $(document).ready(() => {
           showView(this.$view);
         })
         .on(EVENT.VIEW_CLOSE, () => showView(indexView.$view))
+        .on(EVENT.OPTS_CHANGE, optionsChange)
     });
 
     $sidebar
@@ -83,6 +84,24 @@ $(document).ready(() => {
         const $a = $md_list.find('a');
         $a.removeClass('current_title');
         $a.eq(i).addClass('current_title');
+      }
+    }
+
+    function optionsChange(event, changes) {
+      let reload = false;
+
+      Object.keys(changes).forEach((storeKey) => {
+        const value = changes[storeKey];
+
+        switch (storeKey) {
+          case STORE.DEEPLEVEL:
+            reload = true;
+            break;
+        }
+      });
+
+      if (reload) {
+        tryGetIndex();
       }
     }
 
@@ -106,6 +125,7 @@ $(document).ready(() => {
             // TODO: check the changed to use browser's cache
 
             indexView.show(path, deep_level);
+            showView(indexView.$view);
           }
 
         }

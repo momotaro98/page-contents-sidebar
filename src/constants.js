@@ -16,4 +16,5 @@ const DEFAULTS = {
 const EVENT = {
   VIEW_READY    : 'mdisviewer:ready',
   VIEW_CLOSE    : 'mdisviewer:close',
+  OPTS_CHANGE   : 'mdisviewer:change',
 }
