@@ -1,10 +1,30 @@
 <div>
   <nav class="mdi_sidebar">
+
+    <a class="mdisviewer_opts" href="javascript:void(0)">
+      <span></span>
+    </a>
+
     <div class="mdisviewer_views">
-      <div class="mdisviewer_view mdisviewer_indexview current">
+
+      <div class="mdisviewer_view mdisviewer_indexview">
         <div class="mdisviewer_header"></div>
         <div class="mdisviewer_body"></div>
       </div>
+
+      <div class="mdisviewer_view mdisviewer_optsview current">
+        <div class="mdisviewer_header">Settings</div>
+          <form class="mdisviewer_body">
+            <div>
+              <input type="text" data-store="DEEPLEVEL">
+            </div>
+						<div>
+							<button type="submit" class="btn">Save</button>
+						</div>
+          </form>
+        </div>
+      </div>
+
     </div>
   </nav>
 </div>

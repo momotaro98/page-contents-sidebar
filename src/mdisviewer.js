@@ -23,17 +23,11 @@ $(document).ready(() => {
     const $views = $sidebar.find('.mdisviewer_view');
     const adapter =  new GistMD();
     const indexView = new IndexView($dom, store, adapter);
+    const optsView = new OptionsView($dom, store);
 
     $html.addClass(ADDON_CLASS);
 
-    // set each index title top position
-    var titleTopArr = [];
-    const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
-    const $article_index = $html.find(adapter_article);
-    const $sectionQuery = $article_index.find('h1, h2, h3, h4, h5');  // TODO: Replace because this is not flexible
-    for (var i = 0; i < $sectionQuery.length; i++) {
-      titleTopArr[i] = $sectionQuery.eq(i).offset().top;
-    }
+    var titleTopArr = [];  // top position list of each title
 
     // set hilight to the 1st title
     var currentTitlePos = -1;
@@ -49,6 +43,8 @@ $(document).ready(() => {
         setCurrentTitle(0);
       }
       else {
+        // TODO: Fix this Bug
+        // 間隔が広いときハイライト箇所がおかしくなるので直す
         var index = 0;
         var pre_diff = Number.MAX_VALUE;
         $(titleTopArr).each((i, val) => {
@@ -61,6 +57,16 @@ $(document).ready(() => {
         });
         setCurrentTitle(index);
       }
+    });
+
+    const views = [indexView, optsView];
+    views.forEach((view) => {
+      $(view)
+        .on(EVENT.VIEW_READY, function (event) {
+          showView(this.$view);
+        })
+        .on(EVENT.VIEW_CLOSE, () => showView(indexView.$view))
+        .on(EVENT.OPTS_CHANGE, optionsChange)
     });
 
     $sidebar
@@ -81,7 +87,36 @@ $(document).ready(() => {
       }
     }
 
+    function optionsChange(event, changes) {
+      let reload = false;
+
+      Object.keys(changes).forEach((storeKey) => {
+        const value = changes[storeKey];
+
+        switch (storeKey) {
+          case STORE.DEEPLEVEL:
+            reload = true;
+            break;
+        }
+      });
+
+      if (reload) {
+        tryGetIndex();
+      }
+    }
+
     function tryGetIndex() {
+      const deep_level = store.get(STORE.DEEPLEVEL);
+
+      // set titleTopArr for scroll hilight chasing
+      const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
+      const $article_index = $html.find(adapter_article);
+      const header_levels = getHeaderLevels(deep_level);
+      const $sectionQuery = $article_index.find(header_levels);
+      for (var i = 0; i < $sectionQuery.length; i++) {
+        titleTopArr[i] = $sectionQuery.eq(i).offset().top;
+      }
+
       adapter.getPathWhosePageIsMarkdown((path) => {
         if (path) {
           $html.addClass(SHOW_CLASS);
@@ -89,7 +124,8 @@ $(document).ready(() => {
           if (isSidebarVisible()) {
             // TODO: check the changed to use browser's cache
 
-            indexView.show(path);
+            indexView.show(path, deep_level);
+            showView(indexView.$view);
           }
 
         }
@@ -100,6 +136,11 @@ $(document).ready(() => {
       });
     }
 
+    function showView(view) {
+      $views.removeClass('current')
+      view.addClass('current')
+    }
+
     function layoutChanged() {
       const width = $sidebar.outerWidth();
       adapter.updateLayout(isSidebarVisible(), width);
@@ -108,6 +149,35 @@ $(document).ready(() => {
 
     function isSidebarVisible() {
       return $html.hasClass(SHOW_CLASS);
+    }
+
+    // TODO: getHeaderLevels might be implemented in each adapter class
+    function getHeaderLevels(deep_level) {
+      var ret_string;
+      switch (deep_level) {
+        case 1:
+          ret_string = 'h1';
+          break;
+        case 2:
+          ret_string = 'h1, h2';
+          break;
+        case 3:
+          ret_string = 'h1, h2, h3';
+          break;
+        case 4:
+          ret_string = 'h1, h2, h3, h4';
+          break;
+        case 5:
+          ret_string = 'h1, h2, h3, h4, h5';
+          break;
+        case 6:
+          ret_string = 'h1, h2, h3, h4, h5, h6';
+          break;
+        default:
+          ret_string = 'h1, h2, h3, h4, h5, h6';
+          break;
+      }
+      return ret_string;
     }
   }
 });
