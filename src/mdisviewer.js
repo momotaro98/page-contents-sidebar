@@ -1,8 +1,4 @@
 $(document).ready(() => {
-  // TODO: Delete this after basic func is implemented
-  // for Debugging
-  console.log("This is md-index-sideviewer");
-
   const store = new Storage();
 
   parallel(Object.keys(STORE), setDefault, loadExtension);
@@ -20,6 +16,7 @@ $(document).ready(() => {
     const $document = $(document);
     const $dom = $(TEMPLATE);
     const $sidebar = $dom.find('.mdi_sidebar');
+    const $toggler = $sidebar.find('.mdisviewer_toggle');
     const $views = $sidebar.find('.mdisviewer_view');
     const adapter =  new GistMD();
     const indexView = new IndexView($dom, store, adapter);
@@ -59,15 +56,19 @@ $(document).ready(() => {
       }
     });
 
+    $toggler.click(toggleSidebarAndSave);
+
     const views = [indexView, optsView];
     views.forEach((view) => {
       $(view)
         .on(EVENT.VIEW_READY, function (event) {
-          showView(this.$view);
+          showView(this.$view)
         })
         .on(EVENT.VIEW_CLOSE, () => showView(indexView.$view))
-        .on(EVENT.OPTS_CHANGE, optionsChange)
+        .on(EVENT.OPTS_CHANGE, optionsChange);
     });
+
+    $document.on(EVENT.TOGGLE, layoutChanged);
 
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
@@ -106,10 +107,11 @@ $(document).ready(() => {
     }
 
     function tryGetIndex() {
+      const shown = store.get(STORE.SHOWN);
       const deep_level = store.get(STORE.DEEPLEVEL);
 
       // set titleTopArr for scroll hilight chasing
-      const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
+      const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature class name
       const $article_index = $html.find(adapter_article);
       const header_levels = getHeaderLevels(deep_level);
       const $sectionQuery = $article_index.find(header_levels);
@@ -119,26 +121,51 @@ $(document).ready(() => {
 
       adapter.getPathWhosePageIsMarkdown((path) => {
         if (path) {
-          $html.addClass(SHOW_CLASS);
+          $toggler.show();
+
+          if (shown) {
+            toggleSidebar(true);
+          }
 
           if (isSidebarVisible()) {
-            // TODO: check the changed to use browser's cache
-
             indexView.show(path, deep_level);
             showView(indexView.$view);
           }
 
         }
         else {
-          // hide the sidebar
+          $toggler.hide();
+          toggleSidebar(false);
         }
         layoutChanged();
       });
     }
 
     function showView(view) {
-      $views.removeClass('current')
-      view.addClass('current')
+      $views.removeClass('current');
+      view.addClass('current');
+    }
+
+    function toggleSidebarAndSave() {
+      store.set(STORE.SHOWN, !isSidebarVisible(), () => {
+        toggleSidebar();
+        if (isSidebarVisible()) {
+          tryGetIndex();
+        }
+      });
+    }
+
+    function toggleSidebar(visibility) {
+      if (visibility !== undefined) {
+        if(isSidebarVisible() === visibility) {
+          return;
+        }
+        toggleSidebar();
+      }
+      else {
+       $html.toggleClass(SHOW_CLASS);
+       $document.trigger(EVENT.TOGGLE, isSidebarVisible());
+      }
     }
 
     function layoutChanged() {
@@ -151,7 +178,7 @@ $(document).ready(() => {
       return $html.hasClass(SHOW_CLASS);
     }
 
-    // TODO: getHeaderLevels might be implemented in each adapter class
+    // TODO: getHeaderLevels should be implemented in adapter class
     function getHeaderLevels(deep_level) {
       var ret_string;
       switch (deep_level) {
