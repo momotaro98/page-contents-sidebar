@@ -22,15 +22,28 @@ class GistMD extends Adapter {
     $containers.css('margin-left', shouldPushLeft ? SPACING : '');
   }
 
+  // getPathWhosePageIsMarkdown returns path string if the page Markdown file page
   getPathWhosePageIsMarkdown(cb) {
     // get path page
     const path = 'https://gist.github.com/username/hashchars';  // dummy page
-    // if the page content is not markdown page
-    // or has anything wrong.
-    // cb();
 
-    // if ok
-    cb(path);
+    if (this._isMarkDownPage()) {
+      console.log("It's MarkDown Page");
+      cb(path);
+    }
+
+    cb();
+  }
+
+  // _isMarkDownPage returns true(here's page is MarkDown file) or false(Not).
+  _isMarkDownPage() {
+    let title = $("head").find("title").text();
+    let extension = title.slice(-3);
+    console.log(extension);
+    if (extension === ".md") {  // Now, _isMarkDownPage judges the MarkDown Page whether the title ends with ".md".
+      return true;
+    }
+    return false;
   }
 
   loadMDArray(path, deep_level, cb) {
