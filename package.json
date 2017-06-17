@@ -1,6 +1,6 @@
 {
   "name": "md-index-sideviewer",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "Web Side Viewer for Markdown",
   "scripts": {
     "build": "gulp",
