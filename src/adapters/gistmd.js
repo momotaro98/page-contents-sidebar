@@ -100,13 +100,13 @@ class GistMD extends Adapter {
   }
 
   _getIndexContentArray() {
-    return getArray($("article").find("a:first"));
+    return getArray($("article").find('h1, h2, h3, h4, h5, h6').find("a:first"));
 
     function getArray($spec) {
       var skip_to_currentTag_flag = false;
       var skip_to_NextUpperTag_flag = false;
       var ret_array = [];
-      $('article').find('a').each(function() {
+      $('article').find('h1, h2, h3, h4, h5, h6').find('a:first-child').each(function() {
         if (skip_to_currentTag_flag || $(this).is($spec)) {
           skip_to_currentTag_flag = true;
           const specTag = $spec.parent()[0].tagName;
