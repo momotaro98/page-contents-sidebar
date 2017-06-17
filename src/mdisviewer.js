@@ -95,8 +95,8 @@ $(document).ready(() => {
         titleTopArr[i] = $sectionQuery.eq(i).offset().top;
       }
 
-      adapter.getPathWhosePageIsMarkdown((path) => {
-        if (path) {
+      adapter.getPageThatHasMarkdown((page) => {
+        if (page) {
           $toggler.show();
 
           if (shown) {
@@ -104,7 +104,7 @@ $(document).ready(() => {
           }
 
           if (isSidebarVisible()) {
-            indexView.show(path, deep_level);
+            indexView.show(page, deep_level);
             showView(indexView.$view);
           }
 

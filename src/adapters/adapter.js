@@ -49,6 +49,25 @@ class TagHeaderComparator {
   }
 }
 
+class Page {
+  constructor(url, title, fileName) {
+    this._url = url;
+    this._title = title;
+    this._fileName = fileName;
+  }
+
+  getURL() {
+    return this._url;
+  }
+
+  getTitle() {
+    return this._title;
+  }
+
+  getFileName() {
+    return this._fileName;
+  }
+}
 
 class IndexContent {
   constructor() {
