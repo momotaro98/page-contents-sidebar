@@ -6,22 +6,22 @@ class IndexView {
     this.$body = this.$view.find('.mdisviewer_body');
   }
 
-  show(path, deep_level) {
-    this.adapter.loadMDArray(path, deep_level, (err, md_array) => {
+  show(page, deep_level) {
+    this.adapter.loadMDArray(page, deep_level, (err, md_array) => {
       if (err) {
         return;
       }
       this._md_array = md_array;
     });
-    this._showHeader(path);
+    this._showHeader(page);
     this._showBody();
   }
 
-  _showHeader(path) {
+  _showHeader(page) {
     this.$view.find('.mdisviewer_header')
       .html(
         '<div class="mdisviewer_header_title">' +
-          '<a href="' + path + '">' + 'demo-link' + '</a>' +
+          '<a href="' + page.getURL() + '">' + page.getFileName() + '</a>' +
         '</div>'
       );
   }

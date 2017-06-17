@@ -22,28 +22,23 @@ class GistMD extends Adapter {
     $containers.css('margin-left', shouldPushLeft ? SPACING : '');
   }
 
-  // getPathWhosePageIsMarkdown returns path string if the page Markdown file page
-  getPathWhosePageIsMarkdown(cb) {
-    // get path page
-    const path = 'https://gist.github.com/username/hashchars';  // dummy page
-
+  // getPageThatHasMarkdown returns Page object if the page is Markdown file page
+  getPageThatHasMarkdown(cb) {
     let is_MarkDown_Page = this._isMarkDownPage();
     if (!is_MarkDown_Page) {
       cb();
     }
     else {
-       cb(path);
+      const page = this._getPage();
+       cb(page);
     }
   }
 
-  // _isMarkDownPage returns true(here's page is MarkDown file) or false(Not).
+  // _isMarkDownPage returns true(here's page has MarkDown file) or false(Not).
   _isMarkDownPage() {
     // find the file name for see the extension
-    let file_name = $("body")
-                      .find(".gist-header-title")
-                      .find("a")
-                      .text();  // Now, _isMarkDownPage judges whether the page is MarkDown by finding .gist-header-title class name.
-    let extension = file_name.slice(-3);
+    let file_name = this._getFileName();
+    let extension = file_name.slice(-3); // Now, _isMarkDownPage judges whether the page is MarkDown by finding .gist-header-title class name.
     if (extension === ".md") {
       return true;
     }
@@ -51,13 +46,26 @@ class GistMD extends Adapter {
     return false;
   }
 
+  // _getPage gets the page Object of current page
+  _getPage() {
+    // get URL without hash part
+    const url = location.protocol + "//" + location.host + location.pathname;
+    // get title
+    const title = document.title;
+    // get fileName
+    const fileName = this._getFileName();
+
+    return new Page(url, title, fileName);
+  }
+
+
   // loadMDArray loads array that contains the nested constructure of index
   /*
   * About MD Array
   * Example:
   * ["Chapter1", ["section 1-1", "section 2-2", ["sub-section 2-2-1", "sub-section 2-2-2"]], "Chapter2", "Chapter3"]
   */
-  loadMDArray(path, deep_level, cb) {
+  loadMDArray(page, deep_level, cb) {
     // Load the markdown's index array
     var md_array = this._getIndexContentArray();
 
@@ -153,6 +161,14 @@ class GistMD extends Adapter {
       return ret_array;
     }
 
+  }
+
+  // _getFileName gets a file name of the MardDown file's Page
+  _getFileName() {
+    return $("body")
+             .find(".gist-header-title")
+             .find("a")
+             .text();
   }
 
 }
