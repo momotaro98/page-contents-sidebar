@@ -52,6 +52,7 @@ $(document).ready(() => {
     adapter.init($sidebar);
     return tryGetIndex();
 
+    // setCurrentTitle sets hilight to the spot title in sidebar
     function setCurrentTitle(i) {
       if (i != currentTitlePos) {
         currentTitlePos = i;
@@ -154,11 +155,13 @@ $(document).ready(() => {
       return $html.hasClass(SHOW_CLASS);
     }
 
+    // hilightIndex looks for a title to be hilighted and hilight it.
     function hilightIndex() {
       const SCROLL_MARGIN = 30;
       const titleIndexLast = titleTopArr.length - 1;
       var scrollTop = $window.scrollTop();
 
+      // when scrollTop is between the page's top and the first title
       if (scrollTop - titleTopArr[0] <= SCROLL_MARGIN) {
         setCurrentTitle(0);
         return;
