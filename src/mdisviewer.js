@@ -25,32 +25,11 @@ $(document).ready(() => {
     $html.addClass(ADDON_CLASS);
 
     var titleTopArr = [];  // top position list of each title
-
-    // set hilight to the 1st title
-    var currentTitlePos = -1;
-    setCurrentTitle(0);
+    var currentTitlePos = -1;  // iniciate the title position for hilighting
 
     // set window scroll action to chase the titles
-    $window.scroll(() => {
-      const SCROLL_MARGIN = 50;
-      const titleIndexLast = titleTopArr.length - 1;
-      var scrollTop = $window.scrollTop();
-
-      var index = 0;
-      var pre_offset = Number.MAX_VALUE;
-      $(titleTopArr).each((i, val) => {
-        var offset = scrollTop - val;
-        if (offset > SCROLL_MARGIN && offset < pre_offset) {
-          index = i;
-        }
-        else if (offset <= SCROLL_MARGIN) {
-          return false;
-        }
-        pre_offset = offset;
-      });
-      setCurrentTitle(index);
-    });
-
+    $window.scroll(hilightIndex);
+    // set toggle click action to showing sidebar or not
     $toggler.click(toggleSidebarAndSave);
 
     const views = [indexView, optsView];
@@ -134,6 +113,7 @@ $(document).ready(() => {
           toggleSidebar(false);
         }
         layoutChanged();
+        hilightIndex();
       });
     }
 
@@ -172,6 +152,31 @@ $(document).ready(() => {
 
     function isSidebarVisible() {
       return $html.hasClass(SHOW_CLASS);
+    }
+
+    function hilightIndex() {
+      const SCROLL_MARGIN = 30;
+      const titleIndexLast = titleTopArr.length - 1;
+      var scrollTop = $window.scrollTop();
+
+      if (scrollTop - titleTopArr[0] <= SCROLL_MARGIN) {
+        setCurrentTitle(0);
+        return;
+      }
+
+      var index = 0;
+      var pre_offset = Number.MAX_VALUE;
+      $(titleTopArr).each((i, val) => {
+        var offset = scrollTop - val;
+        if (offset > SCROLL_MARGIN && offset < pre_offset) {
+          index = i;
+        }
+        else if (offset <= SCROLL_MARGIN) {
+          return false;
+        }
+        pre_offset = offset;
+      });
+      setCurrentTitle(index);
     }
 
     // TODO: getHeaderLevels should be implemented in adapter class
