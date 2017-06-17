@@ -51,6 +51,12 @@ class GistMD extends Adapter {
     return false;
   }
 
+  // loadMDArray loads array that contains the nested constructure of index
+  /*
+  * About MD Array
+  * Example:
+  * ["Chapter1", ["section 1-1", "section 2-2", ["sub-section 2-2-1", "sub-section 2-2-2"]], "Chapter2", "Chapter3"]
+  */
   loadMDArray(path, deep_level, cb) {
     // Load the markdown's index array
     var md_array = this._getIndexContentArray();
@@ -65,6 +71,7 @@ class GistMD extends Adapter {
     cb(null, md_array);
   }
 
+  // _filterByDeepLevel filters the MD array's nested arrays according to deep level
   _filterByDeepLevel(md_array, deep_level) {
     /*
      * Input Example
@@ -99,14 +106,18 @@ class GistMD extends Adapter {
     }
   }
 
+  // _getIndexContentArray gets array that contains nested structure of index
+  // in use of recursive function, getArray($dom)
   _getIndexContentArray() {
-    return getArray($("article").find("a:first"));
+    return getArray($("article").find('h1, h2, h3, h4, h5, h6').find("a:first"));
 
     function getArray($spec) {
+      // getArray uses these 2 flags because the $DOM loop gets each $a DOM.
       var skip_to_currentTag_flag = false;
       var skip_to_NextUpperTag_flag = false;
+
       var ret_array = [];
-      $('article').find('a').each(function() {
+      $('article').find('h1, h2, h3, h4, h5, h6').find('a:first-child').each(function() {
         if (skip_to_currentTag_flag || $(this).is($spec)) {
           skip_to_currentTag_flag = true;
           const specTag = $spec.parent()[0].tagName;
