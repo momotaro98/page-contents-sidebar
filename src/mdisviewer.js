@@ -157,7 +157,7 @@ $(document).ready(() => {
 
     // hilightIndex looks for a title to be hilighted and hilight it.
     function hilightIndex() {
-      const SCROLL_MARGIN = 30;
+      const SCROLL_MARGIN = -5;
       const titleIndexLast = titleTopArr.length - 1;
       var scrollTop = $window.scrollTop();
 
