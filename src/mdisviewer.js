@@ -36,24 +36,19 @@ $(document).ready(() => {
       const titleIndexLast = titleTopArr.length - 1;
       var scrollTop = $window.scrollTop();
 
-      if (scrollTop <= SCROLL_MARGIN) {
-        setCurrentTitle(0);
-      }
-      else {
-        // TODO: Fix this Bug
-        // 間隔が広いときハイライト箇所がおかしくなるので直す
-        var index = 0;
-        var pre_diff = Number.MAX_VALUE;
-        $(titleTopArr).each((i, val) => {
-          var diff = Math.abs(scrollTop - val);
-          if (diff > pre_diff) {
-            index = i - 1;
-            return false;
-          }
-          pre_diff = diff;
-        });
-        setCurrentTitle(index);
-      }
+      var index = 0;
+      var pre_offset = Number.MAX_VALUE;
+      $(titleTopArr).each((i, val) => {
+        var offset = scrollTop - val;
+        if (offset > SCROLL_MARGIN && offset < pre_offset) {
+          index = i;
+        }
+        else if (offset <= SCROLL_MARGIN) {
+          return false;
+        }
+        pre_offset = offset;
+      });
+      setCurrentTitle(index);
     });
 
     $toggler.click(toggleSidebarAndSave);
@@ -108,13 +103,14 @@ $(document).ready(() => {
 
     function tryGetIndex() {
       const shown = store.get(STORE.SHOWN);
-      const deep_level = store.get(STORE.DEEPLEVEL);
+      const deep_level = Number(store.get(STORE.DEEPLEVEL));
 
       // set titleTopArr for scroll hilight chasing
       const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature class name
       const $article_index = $html.find(adapter_article);
       const header_levels = getHeaderLevels(deep_level);
       const $sectionQuery = $article_index.find(header_levels);
+      titleTopArr = new Array($sectionQuery.length);
       for (var i = 0; i < $sectionQuery.length; i++) {
         titleTopArr[i] = $sectionQuery.eq(i).offset().top;
       }
