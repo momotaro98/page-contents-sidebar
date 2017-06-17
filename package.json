@@ -1,5 +1,5 @@
 {
-  "name": "md-index-sideviewer",
+  "name": "page-contents-sidebar",
   "version": "0.1.1",
   "description": "Web Side Viewer for Markdown",
   "scripts": {
@@ -10,13 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/momotaro98/md-index-sideviewer"
+    "url": "https://github.com/momotaro98/page-contents-sidebar"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/momotaro98/md-index-sideviewer/issues"
+    "url": "https://github.com/momotaro98/page-contents-sidebar/issues"
   },
-  "homepage": "https://github.com/momotaro98/md-index-sideviewer",
+  "homepage": "https://github.com/momotaro98/page-contents-sidebar",
   "devDependencies": {
     "async": "~0.9.0",
     "babel-core": "^6.1.2",

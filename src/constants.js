@@ -1,4 +1,4 @@
-const ADDON_CLASS = 'md-index-sideviewer';
+const ADDON_CLASS = 'page-contents-sidebar';
 const SHOW_CLASS = 'mdisviewer-show';
 
 const STORE = {

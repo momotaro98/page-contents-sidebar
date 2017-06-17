@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "author": "Shintaro Ikeda",
   "description": "Sidebar for web page contents",
-  "homepage_url": "https://github.com/momotaro98/md-index-sideviewer",
+  "homepage_url": "https://github.com/momotaro98/page-contents-sidebar",
   "icons": {
     "128": "icons/icon128.png"
   },
