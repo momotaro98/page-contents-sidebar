@@ -2,7 +2,7 @@ import gulp from 'gulp'
 import {merge} from 'event-stream'
 import map from 'map-stream'
 const $ = require('gulp-load-plugins')();
-
+const version = require('./package.json').version;
 
 // Tasks
 gulp.task('clean', () => {
@@ -62,8 +62,9 @@ gulp.task('js', ['template'], () => {
 gulp.task('devdist', ['js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/app/icons'),
-    pipe(['./libs/**/*', './tmp/mdisviewer.*', './src/config/manifest.json'], './tmp/app/'),
-    pipe('./src/config/background.js', $.babel(), './tmp/app/')
+    pipe(['./libs/**/*', './tmp/mdisviewer.*'], './tmp/app/'),
+    pipe('./src/config/background.js', $.babel(), './tmp/app/'),
+    pipe('./src/config/manifest.json', $.replace('$VERSION', version), './tmp/app/')
   );
 });
 
