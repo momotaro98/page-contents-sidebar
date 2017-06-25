@@ -1,4 +1,4 @@
-const ADDON_CLASS = 'md-index-sideviewer';
+const ADDON_CLASS = 'page-contents-sidebar';
 const SHOW_CLASS = 'mdisviewer-show';
 
 const STORE = {
@@ -10,10 +10,11 @@ const STORE = {
 const DEFAULTS = {
   WIDTH : 232,
   DEEPLEVEL: 6,
-  SHOWN : false
+  SHOWN : true
 };
 
 const EVENT = {
+  TOGGLE        : 'octotree:toggle',
   VIEW_READY    : 'mdisviewer:ready',
   VIEW_CLOSE    : 'mdisviewer:close',
   OPTS_CHANGE   : 'mdisviewer:change',

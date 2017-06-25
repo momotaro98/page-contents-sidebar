@@ -22,18 +22,50 @@ class GistMD extends Adapter {
     $containers.css('margin-left', shouldPushLeft ? SPACING : '');
   }
 
-  getPathWhosePageIsMarkdown(cb) {
-    // get path page
-    const path = 'https://gist.github.com/username/hashchars';  // dummy page
-    // if the page content is not markdown page
-    // or has anything wrong.
-    // cb();
-
-    // if ok
-    cb(path);
+  // getPageThatHasMarkdown returns Page object if the page is Markdown file page
+  getPageThatHasMarkdown(cb) {
+    let is_MarkDown_Page = this._isMarkDownPage();
+    if (!is_MarkDown_Page) {
+      cb();
+    }
+    else {
+      const page = this._getPage();
+       cb(page);
+    }
   }
 
-  loadMDArray(path, deep_level, cb) {
+  // _isMarkDownPage returns true(here's page has MarkDown file) or false(Not).
+  _isMarkDownPage() {
+    // find the file name for see the extension
+    let file_name = this._getFileName();
+    let extension = file_name.slice(-3); // Now, _isMarkDownPage judges whether the page is MarkDown by finding .gist-header-title class name.
+    if (extension === ".md") {
+      return true;
+    }
+
+    return false;
+  }
+
+  // _getPage gets the page Object of current page
+  _getPage() {
+    // get URL without hash part
+    const url = location.protocol + "//" + location.host + location.pathname;
+    // get title
+    const title = document.title;
+    // get fileName
+    const fileName = this._getFileName();
+
+    return new Page(url, title, fileName);
+  }
+
+
+  // loadMDArray loads array that contains the nested constructure of index
+  /*
+  * About MD Array
+  * Example:
+  * ["Chapter1", ["section 1-1", "section 2-2", ["sub-section 2-2-1", "sub-section 2-2-2"]], "Chapter2", "Chapter3"]
+  */
+  loadMDArray(page, deep_level, cb) {
     // Load the markdown's index array
     var md_array = this._getIndexContentArray();
 
@@ -47,6 +79,7 @@ class GistMD extends Adapter {
     cb(null, md_array);
   }
 
+  // _filterByDeepLevel filters the MD array's nested arrays according to deep level
   _filterByDeepLevel(md_array, deep_level) {
     /*
      * Input Example
@@ -81,14 +114,18 @@ class GistMD extends Adapter {
     }
   }
 
+  // _getIndexContentArray gets array that contains nested structure of index
+  // in use of recursive function, getArray($dom)
   _getIndexContentArray() {
-    return getArray($("article").find("a:first"));
+    return getArray($("article").find('h1, h2, h3, h4, h5, h6').find("a:first"));
 
     function getArray($spec) {
+      // getArray uses these 2 flags because the $DOM loop gets each $a DOM.
       var skip_to_currentTag_flag = false;
       var skip_to_NextUpperTag_flag = false;
+
       var ret_array = [];
-      $('article').find('a').each(function() {
+      $('article').find('h1, h2, h3, h4, h5, h6').find('a:first-child').each(function() {
         if (skip_to_currentTag_flag || $(this).is($spec)) {
           skip_to_currentTag_flag = true;
           const specTag = $spec.parent()[0].tagName;
@@ -124,6 +161,14 @@ class GistMD extends Adapter {
       return ret_array;
     }
 
+  }
+
+  // _getFileName gets a file name of the MardDown file's Page
+  _getFileName() {
+    return $("body")
+             .find(".gist-header-title")
+             .find("a")
+             .text();
   }
 
 }

@@ -1,8 +1,4 @@
 $(document).ready(() => {
-  // TODO: Delete this after basic func is implemented
-  // for Debugging
-  console.log("This is md-index-sideviewer");
-
   const store = new Storage();
 
   parallel(Object.keys(STORE), setDefault, loadExtension);
@@ -20,6 +16,7 @@ $(document).ready(() => {
     const $document = $(document);
     const $dom = $(TEMPLATE);
     const $sidebar = $dom.find('.mdi_sidebar');
+    const $toggler = $sidebar.find('.mdisviewer_toggle');
     const $views = $sidebar.find('.mdisviewer_view');
     const adapter =  new GistMD();
     const indexView = new IndexView($dom, store, adapter);
@@ -28,46 +25,24 @@ $(document).ready(() => {
     $html.addClass(ADDON_CLASS);
 
     var titleTopArr = [];  // top position list of each title
-
-    // set hilight to the 1st title
-    var currentTitlePos = -1;
-    setCurrentTitle(0);
+    var currentTitlePos = -1;  // iniciate the title position for hilighting
 
     // set window scroll action to chase the titles
-    $window.scroll(() => {
-      const SCROLL_MARGIN = 50;
-      const titleIndexLast = titleTopArr.length - 1;
-      var scrollTop = $window.scrollTop();
-
-      if (scrollTop <= SCROLL_MARGIN) {
-        setCurrentTitle(0);
-      }
-      else {
-        // TODO: Fix this Bug
-        // 間隔が広いときハイライト箇所がおかしくなるので直す
-        var index = 0;
-        var pre_diff = Number.MAX_VALUE;
-        $(titleTopArr).each((i, val) => {
-          var diff = Math.abs(scrollTop - val);
-          if (diff > pre_diff) {
-            index = i - 1;
-            return false;
-          }
-          pre_diff = diff;
-        });
-        setCurrentTitle(index);
-      }
-    });
+    $window.scroll(hilightIndex);
+    // set toggle click action to showing sidebar or not
+    $toggler.click(toggleSidebarAndSave);
 
     const views = [indexView, optsView];
     views.forEach((view) => {
       $(view)
         .on(EVENT.VIEW_READY, function (event) {
-          showView(this.$view);
+          showView(this.$view)
         })
         .on(EVENT.VIEW_CLOSE, () => showView(indexView.$view))
-        .on(EVENT.OPTS_CHANGE, optionsChange)
+        .on(EVENT.OPTS_CHANGE, optionsChange);
     });
+
+    $document.on(EVENT.TOGGLE, layoutChanged);
 
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
@@ -77,6 +52,7 @@ $(document).ready(() => {
     adapter.init($sidebar);
     return tryGetIndex();
 
+    // setCurrentTitle sets hilight to the spot title in sidebar
     function setCurrentTitle(i) {
       if (i != currentTitlePos) {
         currentTitlePos = i;
@@ -106,39 +82,67 @@ $(document).ready(() => {
     }
 
     function tryGetIndex() {
-      const deep_level = store.get(STORE.DEEPLEVEL);
+      const shown = store.get(STORE.SHOWN);
+      const deep_level = Number(store.get(STORE.DEEPLEVEL));
 
       // set titleTopArr for scroll hilight chasing
-      const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature const
+      const adapter_article = 'article.markdown-body';  // TODO: Replace variable because this is gist feature class name
       const $article_index = $html.find(adapter_article);
       const header_levels = getHeaderLevels(deep_level);
       const $sectionQuery = $article_index.find(header_levels);
+      titleTopArr = new Array($sectionQuery.length);
       for (var i = 0; i < $sectionQuery.length; i++) {
         titleTopArr[i] = $sectionQuery.eq(i).offset().top;
       }
 
-      adapter.getPathWhosePageIsMarkdown((path) => {
-        if (path) {
-          $html.addClass(SHOW_CLASS);
+      adapter.getPageThatHasMarkdown((page) => {
+        if (page) {
+          $toggler.show();
+
+          if (shown) {
+            toggleSidebar(true);
+          }
 
           if (isSidebarVisible()) {
-            // TODO: check the changed to use browser's cache
-
-            indexView.show(path, deep_level);
+            indexView.show(page, deep_level);
             showView(indexView.$view);
           }
 
         }
         else {
-          // hide the sidebar
+          $toggler.hide();
+          toggleSidebar(false);
         }
         layoutChanged();
+        hilightIndex();
       });
     }
 
     function showView(view) {
-      $views.removeClass('current')
-      view.addClass('current')
+      $views.removeClass('current');
+      view.addClass('current');
+    }
+
+    function toggleSidebarAndSave() {
+      store.set(STORE.SHOWN, !isSidebarVisible(), () => {
+        toggleSidebar();
+        if (isSidebarVisible()) {
+          tryGetIndex();
+        }
+      });
+    }
+
+    function toggleSidebar(visibility) {
+      if (visibility !== undefined) {
+        if(isSidebarVisible() === visibility) {
+          return;
+        }
+        toggleSidebar();
+      }
+      else {
+       $html.toggleClass(SHOW_CLASS);
+       $document.trigger(EVENT.TOGGLE, isSidebarVisible());
+      }
     }
 
     function layoutChanged() {
@@ -151,7 +155,34 @@ $(document).ready(() => {
       return $html.hasClass(SHOW_CLASS);
     }
 
-    // TODO: getHeaderLevels might be implemented in each adapter class
+    // hilightIndex looks for a title to be hilighted and hilight it.
+    function hilightIndex() {
+      const SCROLL_MARGIN = -5;
+      const titleIndexLast = titleTopArr.length - 1;
+      var scrollTop = $window.scrollTop();
+
+      // when scrollTop is between the page's top and the first title
+      if (scrollTop - titleTopArr[0] <= SCROLL_MARGIN) {
+        setCurrentTitle(0);
+        return;
+      }
+
+      var index = 0;
+      var pre_offset = Number.MAX_VALUE;
+      $(titleTopArr).each((i, val) => {
+        var offset = scrollTop - val;
+        if (offset > SCROLL_MARGIN && offset < pre_offset) {
+          index = i;
+        }
+        else if (offset <= SCROLL_MARGIN) {
+          return false;
+        }
+        pre_offset = offset;
+      });
+      setCurrentTitle(index);
+    }
+
+    // TODO: getHeaderLevels should be implemented in adapter class
     function getHeaderLevels(deep_level) {
       var ret_string;
       switch (deep_level) {

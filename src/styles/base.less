@@ -93,9 +93,17 @@
     }
   }
 
-  .mdisviewer_indexview {
+  .mdisviewer_optsview {
     .mdisviewer_header {
-      padding-left: 13px;
+      padding-left: 5px;
+      padding-top: 5px;
+    }
+    & > form {
+      margin: 6px;
+      & > div {
+        padding-top: 5px;
+        padding-bottom: 12px;
+      }
     }
   }
 
@@ -124,4 +132,91 @@ a.mdisviewer_toggle, a.mdisviewer_opts {
 a.mdisviewer_opts {
   width: 15px;
   height: 15px;
+}
+
+a.mdisviewer_toggle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 6px !important;
+
+  &.mdisviewer_loading {
+    & > span:after {
+      content: '';
+    }
+
+    .loader {
+      border-radius: 50%;
+      border: 2px solid #000;
+      border-top: 2px solid rgba(0,0,0,0);
+      border-left: 2px solid rgba(0,0,0,0);
+      width: 16px;
+      height: 16px;
+      animation: loading .5s infinite linear;
+    }
+  }
+
+  .popup {
+    position: absolute;
+    left: 0;
+    top: calc(~"100% + 2px");
+    cursor: pointer;
+    opacity: 0;
+    z-index: 1000004;
+    width: 260px;
+    text-align: left;
+    text-transform: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 5px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    white-space: normal;
+    transition: opacity .3s linear;
+    font-weight: 400;
+    line-height: 20px;
+
+    &:hover {
+      color: black;
+    }
+    &.show {
+      opacity: 1;
+    }
+    & > .arrow, & > .arrow:after {
+      position: absolute;
+      display: block;
+      width: 0;
+      height: 0;
+      border-color: transparent;
+      border-style: solid;
+    }
+    & > .arrow {
+      left: 15px;
+      top: -6px;
+      border-width: 6px;
+      margin-left: -6px;
+      border-top-width: 0;
+      border-bottom-color: rgba(0, 0, 0, .25);
+    }
+    & > .arrow:after {
+      border-width: 5px;
+      content: '';
+      top: 1px;
+      margin-left: -5px;
+      border-top-width: 0;
+      border-bottom-color: #fff;
+    }
+    & > .content {
+      padding: 9px 14px;
+      font-size: 13px;
+    }
+  }
+}
+
+@media print {
+   a.mdisviewer_toggle {
+     display: none;
+   }
+  .mdi_sidebar {
+     display: none;
+  }
 }

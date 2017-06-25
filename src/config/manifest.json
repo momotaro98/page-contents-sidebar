@@ -1,11 +1,12 @@
 {
-  "name": "Markdown Index Side Viewer",
-  "version": "1.0.0",
+  "name": "Page Contents Sidebar",
+  "version": "$VERSION",
   "manifest_version": 2,
   "author": "Shintaro Ikeda",
-  "description": "Side viewer for markdown page",
-  "homepage_url": "https://github.com/momotaro98/md-index-sideviewer",
+  "description": "Sidebar for web page contents",
+  "homepage_url": "https://github.com/momotaro98/page-contents-sidebar",
   "icons": {
+    "128": "icons/icon128.png"
   },
   "permissions": [
     "https://gist.github.com/*"
