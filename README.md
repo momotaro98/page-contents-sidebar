@@ -18,3 +18,17 @@ Sidebar Extension for Markdown on Gist
 ## Future
 
 Scheduled to support other sites such as GitHub and Confluence.
+
+## Development
+
+### Build app
+
+Modify `src` files and run gulp command
+
+```
+gulp
+```
+
+### Inspect app
+
+Open `tmp/app` directory as extension in Chrome browser, [chrome://extensions/](chrome://extensions/)
