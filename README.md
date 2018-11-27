@@ -21,12 +21,19 @@ Scheduled to support other sites such as GitHub and Confluence.
 
 ## Development
 
+### npm install
+
+```
+$ cd page-contents-sidebar
+$ npm install
+```
+
 ### Build app
 
 Modify `src` files and run gulp command
 
 ```
-gulp
+$ gulp
 ```
 
 ### Inspect app
