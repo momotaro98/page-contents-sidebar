@@ -23,7 +23,7 @@
     "babel-preset-es2015": "^6.1.2",
     "chromedriver": "^2.21.2",
     "crx": "^0.4.4",
-    "event-stream": "*",
+    "event-stream": "3.3.4",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "0.0.8",
     "gulp-babel": "^6.1.0",
@@ -40,7 +40,10 @@
     "gulp-zip": "^2.0.3",
     "map-stream": "*",
     "mocha": "2.0.1",
-    "request": "~2.48.0",
+    "request": "^2.88.0",
     "stream-series": "*"
+  },
+  "dependencies": {
+    "package.json": "^2.0.1"
   }
 }
