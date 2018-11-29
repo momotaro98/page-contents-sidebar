@@ -39,3 +39,11 @@ $ gulp
 ### Inspect app
 
 Open `tmp/app` directory as extension in Chrome browser, [chrome://extensions/](chrome://extensions/)
+
+## Deployment app to Chrome Extension
+
+0. Update `version` of package.json
+0. Run `gulp` and see `tmp/app`
+0. Create a zip file of `tmp/app`
+0. Go to [Chrome Ex Dashboard](https://chrome.google.com/webstore/developer/dashboard) and upload the zip file
+0. Push update to master and create release and tag
