@@ -38,7 +38,7 @@ class GistMD extends Adapter {
   _isMarkDownPage() {
     // find the file name for see the extension
     let file_name = this._getFileName();
-    let extension = file_name.slice(-3); // Now, _isMarkDownPage judges whether the page is MarkDown by finding .gist-header-title class name.
+    let extension = file_name.slice(-3); // ex. useful_file.md => .md
     if (extension === ".md") {
       return true;
     }
@@ -164,11 +164,33 @@ class GistMD extends Adapter {
   }
 
   // _getFileName gets a file name of the MardDown file's Page
+  // by doing scraping the HTML file.
+  // [Note] If Gist page HTML structure is changed for this,
+  // we have to follow the change manually for now.
+  /// Current HTML structure
+  /// <body>
+  /// .
+  /// .
+  /// <div class="file-info">
+  ///   <span class="icon">
+  ///    ...
+  ///   </span>
+  ///   <a class="css-truncate" href="#file-docker_cheat-md">
+  ///     <strong class="user-select-contain gist-blob-name css-truncate-target">
+  ///       docker_cheat.md
+  ///   </strong>
+  ///   </a>
+  /// </div>
+  /// .
+  /// .
+  /// </body>
+  //
   _getFileName() {
     return $("body")
-             .find(".gist-header-title")
+             .find(".file-info")
              .find("a")
-             .text();
+             .text()
+             .trim();
   }
 
 }
