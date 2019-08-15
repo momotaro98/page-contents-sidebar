@@ -4,17 +4,11 @@ const map = require('map-stream');
 const $ = require('gulp-load-plugins')();
 const version = require('./package.json').version;
 
-// Tasks
 gulp.task('clean', () => {
-  return pipe('./tmp', $.clean());
-});
-
-gulp.task('build', (cb) => {
-  $.runSequence('clean', 'style', 'template', 'js', 'devdist', cb);
-});
-
-gulp.task('default', ['build'], () => {
-  gulp.watch(['./libs/**/*', './src/**/*'], ['default']);
+  return pipe(
+    './tmp',
+    $.clean()
+  );
 });
 
 gulp.task('style', () => {
@@ -38,7 +32,7 @@ gulp.task('template', () => {
   );
 });
 
-gulp.task('js', ['template'], () => {
+gulp.task('js', gulp.series('template', () => {
   const src = [
     './tmp/template.js',
     './src/constants.js',
@@ -56,16 +50,29 @@ gulp.task('js', ['template'], () => {
     $.concat('mdisviewer.js'),
     './tmp'
   );
-});
+}));
 
-gulp.task('devdist', ['js'], () => {
-  return merge(
+gulp.task('devdist', gulp.series('js', (cb) => {
+   merge(
     pipe('./icons/**/*', './tmp/app/icons'),
     pipe(['./libs/**/*', './tmp/mdisviewer.*'], './tmp/app/'),
     pipe('./src/config/background.js', './tmp/app/'),
     pipe('./src/config/manifest.json', $.replace('$VERSION', version), './tmp/app/')
   );
-});
+  cb(); // Need this callback after Gulp4 because `return merge()` doesn't returns stream
+}));
+
+gulp.task('build', gulp.series(
+  'clean',
+  'style',
+  'template',
+  'js',
+  'devdist'
+));
+
+gulp.task('default', gulp.series('build', () => {
+  gulp.watch(['./libs/**/*', './src/**/*'], gulp.task('default'));
+}));
 
 // Helpers
 function pipe(src, ...transforms) {
@@ -90,7 +97,7 @@ function html2js(template) {
     const body = template.replace('$$', escaped);
 
     file.path = path;
-    file.contents = new Buffer(body);
+    file.contents = Buffer.from(body);
     cb(null, file);
   }
 }
