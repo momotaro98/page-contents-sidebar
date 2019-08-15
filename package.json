@@ -1,12 +1,11 @@
 {
   "name": "page-contents-sidebar",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Web Side Viewer for Markdown",
   "scripts": {
-    "build": "gulp",
-    "test": "gulp test",
-    "dist": "gulp dist",
-    "ff": "cd ./tmp/firefox && jpm run"
+    "start": "gulp",
+    "watch": "gulp",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
