@@ -97,7 +97,7 @@ function html2js(template) {
     const body = template.replace('$$', escaped);
 
     file.path = path;
-    file.contents = new Buffer(body);
+    file.contents = Buffer.from(body);
     cb(null, file);
   }
 }
