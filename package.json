@@ -1,6 +1,6 @@
 {
   "name": "page-contents-sidebar",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Web Side Viewer for Markdown",
   "scripts": {
     "start": "gulp",
@@ -30,12 +30,9 @@
     "gulp-mocha": "^6.0.0",
     "gulp-plumber": "^1.1.0",
     "gulp-replace": "^0.5.4",
-    "gulp-run": "^1.6.4",
-    "gulp-run-sequence": "*",
-    "gulp-util": "^2.2.20",
-    "gulp-zip": "^2.0.3",
     "map-stream": "*",
     "mocha": "^5.2.0",
+    "replace-ext": "^1.0.0",
     "request": "^2.88.0",
     "stream-series": "*"
   },

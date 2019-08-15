@@ -3,6 +3,7 @@ const {merge} = require('event-stream');
 const map = require('map-stream');
 const $ = require('gulp-load-plugins')();
 const version = require('./package.json').version;
+const replaceExt = require('replace-ext');
 
 gulp.task('clean', () => {
   return pipe(
@@ -86,7 +87,7 @@ function html2js(template) {
   return map(escape);
 
   function escape(file, cb) {
-    const path = $.util.replaceExtension(file.path, '.js');
+    const path = replaceExt(file.path, '.js');
     const content = file.contents.toString();
     /* eslint-disable quotes */
     const escaped = content
