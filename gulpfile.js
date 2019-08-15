@@ -1,6 +1,6 @@
-import gulp from 'gulp'
-import {merge} from 'event-stream'
-import map from 'map-stream'
+const gulp = require('gulp');
+const {merge} = require('event-stream');
+const map = require('map-stream');
 const $ = require('gulp-load-plugins')();
 const version = require('./package.json').version;
 
@@ -53,7 +53,6 @@ gulp.task('js', ['template'], () => {
 
   return pipe(
     src,
-    $.babel(),
     $.concat('mdisviewer.js'),
     './tmp'
   );
@@ -63,7 +62,7 @@ gulp.task('devdist', ['js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/app/icons'),
     pipe(['./libs/**/*', './tmp/mdisviewer.*'], './tmp/app/'),
-    pipe('./src/config/background.js', $.babel(), './tmp/app/'),
+    pipe('./src/config/background.js', './tmp/app/'),
     pipe('./src/config/manifest.json', $.replace('$VERSION', version), './tmp/app/')
   );
 });
@@ -82,10 +81,12 @@ function html2js(template) {
   function escape(file, cb) {
     const path = $.util.replaceExtension(file.path, '.js');
     const content = file.contents.toString();
+    /* eslint-disable quotes */
     const escaped = content
       .replace(/\\/g, "\\\\")
       .replace(/'/g, "\\'")
       .replace(/\r?\n/g, "\\n' +\n    '");
+    /* eslint-enable */
     const body = template.replace('$$', escaped);
 
     file.path = path;
