@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/momotaro98/page-contents-sidebar",
   "devDependencies": {
-    "async": "~0.9.0",
+    "async": "~2.6.4",
     "chromedriver": "^2.21.2",
     "crx": "^5.0.1",
     "event-stream": "3.3.4",
