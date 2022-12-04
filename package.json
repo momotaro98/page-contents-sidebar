@@ -22,7 +22,7 @@
     "crx": "^5.0.1",
     "event-stream": "3.3.4",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "0.0.8",
+    "gulp-autoprefixer": "8.0.0",
     "gulp-clean": "^0.3.1",
     "gulp-concat": "*",
     "gulp-less": "^4.0.1",
